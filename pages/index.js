@@ -1,13 +1,15 @@
+import Header from '../components/Header'
+import PotCard from '../components/PotCard'
 import Table from '../components/Table'
+import LotteryCard from '../components/PotCard'
+
 import style from '../styles/Home.module.css'
 export default function Home() {
   return (
     <div className={style.wrapper}>
-      {/* TODO: Header */}
-
-      {/* TODO: LotteryCard */}
-
-      {/* TODO: Players Table */}
+      <Header />
+      <PotCard />
+      <Table />
     </div>
   )
 }
