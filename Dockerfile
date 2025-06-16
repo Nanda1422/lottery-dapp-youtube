@@ -1,26 +1,23 @@
-# Install dependencies only when needed
-FROM node:18-alpine AS deps
-WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm install
+# Use an official Node.js image
+FROM node:18-alpine
 
-# Rebuild the source code
-FROM node:18-alpine AS builder
+# Set working directory
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+
+# Copy package.json and lock file
+COPY package.json yarn.lock ./
+
+# Install dependencies
+RUN yarn install
+
+# Copy the rest of the code
 COPY . .
-RUN npm run build
 
-# Production image
-FROM node:18-alpine AS runner
-WORKDIR /app
+# Build the app
+RUN yarn build
 
-ENV NODE_ENV=production
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
+# Expose port 3000
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Start the app
+CMD ["yarn", "start"]
