@@ -1,24 +1,27 @@
-# Use an official Node.js image
+# Use official Node.js image
 FROM node:18-alpine
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy package.json and lock file
-COPY package.json yarn.lock ./
+# Copy package and lock files first (for better caching)
+COPY package.json npm.lock ./
 
 # Install dependencies
-RUN yarn install
+RUN npm install
 
-# Copy the rest of the code
+# Copy rest of the app files
 COPY . .
 
-# Build the app
-RUN yarn build
+# Build the production version of the app
+RUN npm build
 
-# Expose port 3000
-EXPOSE 3000
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=80
 
-# Start the app
-CMD ["yarn", "start", "-p", "3000"]
+# Expose port 80 (for Dokploy to detect the right port)
+EXPOSE 80
 
+# Start the Next.js app
+CMD ["npm", "start"]
