@@ -20,8 +20,8 @@ RUN npm build
 ENV NODE_ENV=production
 ENV PORT=80
 
-# Expose port 80 (for Dokploy to detect the right port)
+
 EXPOSE 80
 
-# Start the Next.js app
+
 CMD ["npm", "start"]
